@@ -1,1 +1,15 @@
+from fastapi import APIRouter
+import sqlite3
+
+router = APIRouter(prefix="/dashboard")
+
+@router.get("/analytics")
+async def get_analytics():
+    conn = sqlite3.connect("citizen_ai.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT category, COUNT(*) FROM concerns GROUP BY category")
+    data = cursor.fetchall()
+    conn.close()
+    return {"analytics": data}
+
 
